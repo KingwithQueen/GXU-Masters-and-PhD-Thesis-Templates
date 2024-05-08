@@ -1,0 +1,113 @@
+%加载并设置宏包
+%广西大学物理学院2021级硕士王信哲制作
+\ctexset{
+	bibname = 参考文献,
+	contentsname=\heiti\zihao{3} 目\ 录,
+	section={
+		name={第,章},number=\chinese{section},
+		format=\heiti\bfseries\centering\zihao{3}\linespread{1.25},
+		beforeskip=20pt,%18ex plus 0.2ex minus .2ex,
+		afterskip=20pt%18ex plus 0.2ex minus .2ex
+	},
+	subsection={
+		format=\heiti\bfseries\raggedright\zihao{4}\linespread{1.25},
+		beforeskip=8.75pt,%18ex plus 0.1ex minus .1ex,
+		afterskip=8.75pt%18ex plus 0.1ex minus .1ex
+	},
+	subsubsection={
+		format=\heiti\bfseries\raggedright\zihao{-4}\linespread{1.25},
+		beforeskip=0pt,
+		afterskip=0pt
+	},
+	appendix/name=附录
+}
+%\usepackage{ctex}%設置中文
+
+\usepackage{tocloft}
+\renewcommand{\cfttoctitlefont}{\hfill} % 将目录标题设置为三号字、黑体
+\renewcommand{\cftaftertoctitle}{\hfill} % 将目录标题居中
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}%让一级标题的章节和页面之间也有点线连接
+\renewcommand{\cftsecfont}{\normalfont}%取消section字体在目录中加粗
+\renewcommand{\cftsecpagefont}{\normalfont}%取消section在目录中对应的页码加粗
+\setlength{\cftbeforesecskip}{0pt}
+\renewcommand{\cftdotsep}{1}
+
+
+\setCJKmainfont{宋体}%设置全局中文字体
+\usepackage{fontspec}%设置英文
+\setmainfont{Times New Roman} % 设置英文为Times New Roman
+\usepackage{amsmath,amssymb,amsthm}
+\let\hbaroriginal\hbar
+\AtBeginDocument{\let\hbar\hbaroriginal}
+%\usepackage{unicode-math}
+%\setmathfont{Latin Modern Math}
+
+\usepackage{geometry}
+\geometry{papersize={21cm,29.7cm}}
+\geometry{left=2.8cm,right=2.5cm,top=2.8cm,bottom=2.2cm}
+\usepackage{mathrsfs}
+\usepackage{wasysym}
+\usepackage{braket}
+\usepackage{indentfirst}
+\usepackage{cases}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{longtable,booktabs}
+\usepackage{color}
+\usepackage[colorlinks,linkcolor=blue,anchorcolor=blue,citecolor=blue]{hyperref}%#006eb2
+%\hypersetup{
+	%	colorlinks=true,
+	%	linkcolor=[rgb]{0,0.43,0.70},
+	%	citecolor=[rgb]{0,0.43,0.70},
+	%	filecolor=[rgb]{0,0.43,0.70},
+	%	urlcolor=[rgb]{0,0.43,0.70}
+	%}
+\usepackage{cleveref}   %可以调用 \Cref{fig:xxx}或者 \ref{fig:xxx}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{fancyhdr}%設置頁眉
+
+\usepackage{setspace}%设置行间距
+\setstretch{1.25}
+
+\usepackage[nottoc]{tocbibind}%[nottoc,numbib]
+%\usepackage{gbt7714}
+\usepackage{gbt7714-gxu}
+\bibliographystyle{gxu}
+\usepackage{natbib}
+\setlength{\bibsep}{0pt}
+%\bibliographystyle{gbt7714-numerical}
+
+\usepackage{appendix}
+
+
+\usepackage{booktabs}
+\usepackage{lipsum} % 用于生成随机文本
+\graphicspath{{图/}{./}}
+\usepackage[justification=centering]{caption}
+\usepackage{bicaption}
+\captionsetup[figure][bi]{labelfont=bf, textfont=bf}
+\captionsetup[figure][bi-second]{name=Figure,labelfont=bf,textfont=bf}
+\captionsetup[table][bi]{labelfont=bf, textfont=bf}
+\captionsetup[table][bi-second]{name=Table,labelfont=bf,textfont=bf}
+
+\usepackage{pdfpages}
+
+% 定义中文摘要环境
+\newenvironment{cnabstract}{
+	\par\small
+	\noindent\mbox{}\hfill{\bfseries \cnabstractname}\hfill\mbox{}
+	\par\vskip 2.5ex
+}{\par\vskip 2.5ex}
+
+% 定义英文摘要环境
+\newenvironment{enabstract}{
+	\par\small
+	\noindent\mbox{}\hfill{\bfseries \enabstractname}\hfill\mbox{}
+	\par\vskip 2.5ex
+}{\par\vskip 2.5ex}
+
+\newcommand{\cnabstractname}{\heiti \fontsize{16pt}{20pt}\textbf{摘\ 要}} % 中文摘要标题
+\newcommand{\enabstractname}{\fontsize{16pt}{20pt}\textbf{ABSTRACT}} % 英文摘要标题
