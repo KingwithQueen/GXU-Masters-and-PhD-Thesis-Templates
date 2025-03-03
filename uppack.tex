@@ -93,6 +93,13 @@
 \captionsetup[table][bi]{labelfont=bf, textfont=bf}
 \captionsetup[table][bi-second]{name=Table,labelfont=bf,textfont=bf}
 
+%设置图表编号格式为{章节号}-{章节内序号}
+\usepackage{chngcntr}
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+\renewcommand{\thefigure}{\thesection-\arabic{figure}}
+\renewcommand{\thetable}{\thesection-\arabic{table}}
+
 \usepackage{pdfpages}
 
 % 定义中文摘要环境
