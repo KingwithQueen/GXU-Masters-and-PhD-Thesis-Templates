@@ -1,6 +1,8 @@
 # -GXU Masters and PhD Thesis Templates-
 生成符合广西大学硕士或博士研究生毕业论文格式要求的论文模板
 
+请务必使用XeLaTex编译器。TexStudio可以在「选项->设置TexStudio->构建->默认编辑器」中更改，Overleaf可以在「File->Settings->Compiler->Compiler」中修改。
+
 封面需要使用学校提供的word版本修改好后导出为毕业论文封面.pdf文件，然后放在毕业论文.tex的同目录下。
 
 由于不确定学校会不会修改封面模板，所以最好使用学校提供的封面模板。我所上传的封面模板是2024年的版本。
