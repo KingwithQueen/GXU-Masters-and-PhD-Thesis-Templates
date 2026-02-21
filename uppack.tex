@@ -32,10 +32,31 @@
 \setlength{\cftbeforesecskip}{0pt}
 \renewcommand{\cftdotsep}{1}
 
+% --- 设置中文字体 ---
+% 尝试寻找系统中的“宋体”，如果找不到则使用当前目录下的 FZSSK.TTF
+\IfFontExistsTF{宋体}{
+	\setCJKmainfont{宋体}
+}{
+	\setCJKmainfont{FZSSK.TTF}[
+	Path=./字体/,
+	% 如果该字体有对应的粗体/斜体文件，可以在这里指定，否则系统会通过算法伪粗体
+	% BoldFont = FZSSK_Bold.TTF, 
+	]
+}
+% --- 设置英文字体 ---
+% 尝试寻找系统中的“Times New Roman”，如果找不到则使用当前目录下的 TIMES.TTF
+\IfFontExistsTF{Times New Roman}{
+	\setmainfont{Times New Roman}
+}{
+	\setmainfont{TIMES.TTF}[
+	Path=./字体/,
+	% 注意：Times New Roman 通常有四个文件（标准、粗体、斜体、粗斜体）
+	 BoldFont=TIMESBD.TTF,
+	 ItalicFont=TIMESI.TTF,
+	 BoldItalicFont=TIMESBI.TTF
+	]
+}
 
-\setCJKmainfont{宋体}%设置全局中文字体
-\usepackage{fontspec}%设置英文
-\setmainfont{Times New Roman} % 设置英文为Times New Roman
 \usepackage{amsmath,amssymb,amsthm}
 \let\hbaroriginal\hbar
 \AtBeginDocument{\let\hbar\hbaroriginal}
@@ -118,3 +139,4 @@
 
 \newcommand{\cnabstractname}{\heiti \fontsize{16pt}{20pt}\textbf{摘\ 要}} % 中文摘要标题
 \newcommand{\enabstractname}{\fontsize{16pt}{20pt}\textbf{ABSTRACT}} % 英文摘要标题
+
