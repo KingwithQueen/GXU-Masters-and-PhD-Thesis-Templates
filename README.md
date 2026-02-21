@@ -9,4 +9,5 @@
 
 2025年3月3日更新：图表编号格式改为{section编号}-{图表在section内的序号}。
 
-2026年2月21日更新：由于Windows的字体有版权，Linux和Overleaf中没有内置Windows的宋体，因此我上传了「方正书宋」字体（我已经获得该字体的商用授权）。若要使用该字体，请下载字体到文档所在目录，然后将unpack.tex中「\setCJKmainfont{宋体}」修改为「\setCJKmainfont[Path=./]{FZSSK.TTF}」即可。有Windows系统的人也可以自己拷贝出Windows系统自带的宋体TTF文件来使用。
+2026年2月21日更新：1. Linux和Overleaf中没有内置Windows的宋体和Times New Roman字体，我上传了这两种字体并更新了uppack.tex文件，可以在系统缺少宋体和Times New Roman字体时自动使用本地文件。Windows用户不必下载这两个字体。
+                  2. 增加了发布(Releases)文件，Windows用户可以在此直接下载不含字体的打包文件，解压即可使用。Overleaf和Linux用户请下载仓库完整代码。
