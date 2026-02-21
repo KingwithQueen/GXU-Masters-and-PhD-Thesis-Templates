@@ -56,6 +56,25 @@
 	 BoldItalicFont=TIMESBI.TTF
 	]
 }
+% --- 3. 设置仿宋字体 (\fangsong) ---
+% ctex 的 \fangsong 命令内部调用的是 zhfs 字体族
+\IfFontExistsTF{仿宋}{
+	\setCJKfamilyfont{zhfs}{仿宋}
+}{
+	\IfFileExists{./字体/FS.TTF}{
+		% 如果系统没仿宋，但当前目录有 FS.TTF，则将其定义为 zhfs 族
+		\setCJKfamilyfont{zhfs}{FS.TTF}[Path=./字体/]
+	}{
+		% 如果两个都没有，Overleaf 通常自带 FandolFangsong
+		\IfFontExistsTF{FandolFangsong-Regular.otf}{
+			\setCJKfamilyfont{zhfs}{FandolFangsong-Regular.otf}
+		}{
+			\typeout{Warning: Fangsong font not found.}
+		}
+	}
+}
+% 重新定义 \fangsong 命令，确保它指向我们刚才定义的 zhfs 族
+\renewcommand*{\fangsong}{\CJKfamily{zhfs}}
 
 \usepackage{amsmath,amssymb,amsthm}
 \let\hbaroriginal\hbar
@@ -139,4 +158,5 @@
 
 \newcommand{\cnabstractname}{\heiti \fontsize{16pt}{20pt}\textbf{摘\ 要}} % 中文摘要标题
 \newcommand{\enabstractname}{\fontsize{16pt}{20pt}\textbf{ABSTRACT}} % 英文摘要标题
+
 
