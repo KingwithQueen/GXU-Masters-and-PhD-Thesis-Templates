@@ -14,4 +14,5 @@
 2026年2月21日更新：1. Linux和Overleaf中没有内置Windows的宋体和Times New Roman字体，我上传了这两种字体并更新了uppack.tex文件，可以在系统缺少宋体和Times New Roman字体时自动使用本地文件。Windows用户不必下载这两个字体。
                   2. 增加了发布(Releases)文件，Windows用户可以在此直接下载不含字体的打包文件，解压即可使用。Overleaf和Linux用户请下载仓库完整代码。
 
-2026年3月22日更新：增加了隶书、黑体字体，当系统没有隶书、黑体、宋体时会自动定义\lishu、\heiti和\songti三个命令。
+2026年3月22日更新：1.增加了隶书、黑体字体，当系统没有隶书、黑体、宋体时会自动定义\lishu、\heiti和\songti三个命令。
+                  2.在重要说明.txt中加入了使用XeLatex编译器的文字说明。
