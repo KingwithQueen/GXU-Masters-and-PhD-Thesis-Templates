@@ -33,7 +33,7 @@
 \renewcommand{\cftdotsep}{1}
 
 % --- 设置中文字体 ---
-% 尝试寻找系统中的“宋体”，如果找不到则使用当前目录下的 FZSSK.TTF
+% 尝试寻找系统中的“宋体”，如果找不到则使用当前目录下的 FZSSK.TTF。\songti命令在下文定义。
 \IfFontExistsTF{宋体}{
 	\setCJKmainfont{宋体}
 }{
@@ -75,6 +75,73 @@
 }
 % 重新定义 \fangsong 命令，确保它指向我们刚才定义的 zhfs 族
 \renewcommand*{\fangsong}{\CJKfamily{zhfs}}
+
+% --- 4. 设置隶书字体 (\lishu) ---
+% ctex 的 \lishu 命令内部调用的是 zhli 字体族
+\IfFontExistsTF{隶书}{
+    \setCJKfamilyfont{zhli}{隶书}
+}{
+    \IfFileExists{./字体/SIMLI.TTF}{
+        % 如果系统没有隶书，但 ./字体/ 目录下有 SIMLI.TTF，则将其定义为 zhli 族
+        \setCJKfamilyfont{zhli}{SIMLI.TTF}[Path=./字体/]
+    }{
+        % 如果两个都没有，由于 Fandol 没提供隶书，这里通常回退到楷体或报警告
+        \IfFontExistsTF{FandolKai-Regular.otf}{
+            \typeout{Warning: Lishu font not found, falling back to FandolKai.}
+            \setCJKfamilyfont{zhli}{FandolKai-Regular.otf}
+        }{
+            \typeout{Warning: Lishu font not found.}
+        }
+    }
+}
+% 重新定义 \lishu 命令，确保指向刚才定义的 zhli 族
+% \providecommand 是为了防止某些极简配置下命令未定义，\renewcommand 则是覆盖 ctex 默认
+\makeatletter
+\DeclareRobustCommand*{\lishu}{\CJKfamily{zhli}}
+\makeatother
+
+% --- 5. 设置黑体字体 (\heiti) ---
+\IfFontExistsTF{黑体}{
+    \setCJKfamilyfont{zhhei}{黑体}
+}{
+    \IfFileExists{./字体/SIMHEI.TTF}{
+        \setCJKfamilyfont{zhhei}{SIMHEI.TTF}[Path=./字体/]
+    }{
+        % 如果都没有，强制使用 Linux 自带的 Fandol 黑体作为保底
+        \IfFontExistsTF{FandolHei-Regular.otf}{
+            \setCJKfamilyfont{zhhei}{FandolHei-Regular.otf}
+        }{
+            \typeout{Warning: Heiti not found!}
+        }
+    }
+}
+% 统一 \heiti 命令
+\makeatletter
+\DeclareRobustCommand*{\heiti}{\CJKfamily{zhhei}}
+\makeatother
+
+% --- 6. 设置宋体命令 (\songti) ---
+% ctex 的 \songti 命令内部调用的是 zhsong 字体族
+\IfFontExistsTF{宋体}{
+    \setCJKfamilyfont{zhsong}{宋体}
+}{
+    \IfFileExists{./字体/FZSSK.TTF}{
+        % 如果系统没有宋体，但 ./字体/ 目录下有 FZSSK.TTF，则将其定义为 zhsong 族
+        \setCJKfamilyfont{zhsong}{FZSSK.TTF}[Path=./字体/]
+    }{
+        % 如果两个都没有，回退到 Linux/Overleaf 自带的 FandolSong
+        \IfFontExistsTF{FandolSong-Regular.otf}{
+            \setCJKfamilyfont{zhsong}{FandolSong-Regular.otf}
+        }{
+            \typeout{Warning: Songti font not found.}
+        }
+    }
+}
+% 重新定义 \songti 命令，确保它指向我们刚才定义的 zhsong 族
+\makeatletter
+\DeclareRobustCommand*{\songti}{\CJKfamily{zhsong}}
+\makeatother
+
 
 \usepackage{amsmath,amssymb,amsthm}
 \let\hbaroriginal\hbar
