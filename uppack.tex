@@ -36,30 +36,59 @@
 
 %-----------------------字体设置-----------------------
 \usepackage{fontspec}
-% --- 定义报错宏：如果字体缺失，则停止编译并显示具体错误信息 ---
+% --- 1. 定义报错宏 ---
 \newcommand{\FontMissingError}[2]{
   \GenericError{(Font Error)}{^^J
     ============================================================^^J
     错误: 找不到字体 "#1" !^^J
     该字体是论文格式必需的。请采取以下措施之一：^^J
-    1. 在系统中安装该字体 (Windows/macOS 系统字体库);^^J
+    1. 在系统中安装该字体 (Windows 系统自带宋体/黑体等);^^J
     2. 将字体文件 "#2" 放入项目根目录下的 [字体] 文件夹中。^^J
     ============================================================}{}{}%
 }
-% --- 辅助宏：自动选择 1.系统字体 -> 2.本地字体 -> 3.报错 ---
-% 参数：#1 内部族名, #2 系统字体名, #3 本地文件名
-\newcommand{\DeployCJKFont}[3]{
-    \IfFontExistsTF{#2}{
-        \setCJKfamilyfont{#1}{#2}
+% --- 2. 版辅助宏 ---
+% 参数：[#1: 索引/可选参数], #2: 内部族名, #3: 系统字体名, #4: 本地文件名
+\newcommand{\DeployCJKFont}[4][]{
+    \IfFontExistsTF{#3}{
+        % 情况1：系统存在该字体（如 Windows 环境）
+        \setCJKfamilyfont{#2}{#3}
     }{
-        \IfFileExists{./字体/#3}{
-            \setCJKfamilyfont{#1}{#3}[Path=./字体/]
+        \IfFileExists{./字体/#4}{
+            % 情况2：系统不存在，使用本地文件
+            % #1 用于传递 FontIndex=0 等参数
+            \setCJKfamilyfont{#2}{#4}[Path=./字体/, #1]
         }{
-            \FontMissingError{#2}{#3}
+            % 情况3：均不存在，报错
+            \FontMissingError{#3}{#4}
         }
     }
 }
-% --- 1. 设置英文字体 (Times New Roman) ---
+% --- 3. 设置中文字体 ---
+% 「宋体」特别处理：使用 SIMSUN.TTC 的第 0 号索引
+\DeployCJKFont[FontIndex=0]{zhsong}{宋体}{SIMSUN.TTC}
+% 设置文档主字体 (CJKmainfont)
+\IfFontExistsTF{宋体}{
+    \setCJKmainfont{宋体}
+}{
+    \IfFileExists{./字体/SIMSUN.TTC}{
+        \setCJKmainfont{SIMSUN.TTC}[
+            Path=./字体/,
+            FontIndex=0,
+            % 注意：宋体没有原生粗体，论文通常通过伪粗体或黑体代换
+            % 如果不需要伪粗体，请注释下行：
+            BoldFeatures={FakeBold=2.5}
+        ]
+    }{
+        \FontMissingError{宋体}{SIMSUN.TTC}
+    }
+}
+% 「其他字体」按常规处理
+\DeployCJKFont{zhhei}{黑体}{SIMHEI.TTF}
+\DeployCJKFont{zhfs}{仿宋}{FS.TTF}
+\DeployCJKFont{zhli}{隶书}{SIMLI.TTF}
+\DeployCJKFont{zhkai}{楷体}{SIMKAI.TTF}
+
+% --- 4. 设置英文字体 (Times New Roman) ---
 \IfFontExistsTF{Times New Roman}{
     \setmainfont{Times New Roman}
 }{
@@ -71,34 +100,10 @@
             BoldItalicFont=TIMESBI.TTF
         ]
     }{
-        \FontMissingError{Times New Roman}{TIMES.TTF / TIMESBD.TTF 等}
+        \FontMissingError{Times New Roman}{TIMES.TTF}
     }
 }
-% --- 2. 设置中文字体族 (供 \songti, \heiti 等命令调用) ---
-% 宋体
-\DeployCJKFont{zhsong}{宋体}{FZSSK.TTF}
-% 黑体
-\DeployCJKFont{zhhei}{黑体}{SIMHEI.TTF}
-% 仿宋
-\DeployCJKFont{zhfs}{仿宋}{FS.TTF}
-% 隶书
-\DeployCJKFont{zhli}{隶书}{SIMLI.TTF}
-% 楷体 (通常论文也会用到)
-\DeployCJKFont{zhkai}{楷体}{SIMKAI.TTF}
-
-% --- 3. 设置文档主字体 (CJKmainfont) ---
-% 这一步是为了确保默认正文使用宋体
-\IfFontExistsTF{宋体}{
-    \setCJKmainfont{宋体}
-}{
-    \IfFileExists{./字体/FZSSK.TTF}{
-        \setCJKmainfont{FZSSK.TTF}[Path=./字体/]
-    }{
-        % 这里不需要再报错，因为上面的 \DeployCJKFont 已经检查过了
-    }
-}
-
-% --- 4. 重新定义标准切换命令 ---
+% --- 5. 重新定义标准切换命令 ---
 \DeclareRobustCommand*{\songti}{\CJKfamily{zhsong}}
 \DeclareRobustCommand*{\heiti}{\CJKfamily{zhhei}}
 \DeclareRobustCommand*{\fangsong}{\CJKfamily{zhfs}}
