@@ -18,3 +18,5 @@
                   2.在重要说明.txt中加入了使用XeLatex编译器的文字说明。
 
 2026年4月6日补充：SchrodingerBlume基于本模板制作了一个新模板，链接为https://github.com/SchrodingerBlume/gxuthesis
+
+2026年4月6日更新：1.全部使用Windows字体，删除了其他非Windows字体。2.优化了代码逻辑，减少了代码长度和Windows下编译时间。
