@@ -16,3 +16,5 @@
 
 2026年3月22日更新：1.增加了隶书、黑体字体，当系统没有隶书、黑体、宋体时会自动定义\lishu、\heiti和\songti三个命令。
                   2.在重要说明.txt中加入了使用XeLatex编译器的文字说明。
+
+2026年4月6日补充：SchrodingerBlume基于本模板制作了一个新模板，链接为https://github.com/SchrodingerBlume/gxuthesis
