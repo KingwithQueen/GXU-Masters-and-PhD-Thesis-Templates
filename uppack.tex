@@ -86,7 +86,7 @@
 \DeployCJKFont{zhhei}{黑体}{SIMHEI.TTF}
 \DeployCJKFont{zhfs}{仿宋}{FS.TTF}
 \DeployCJKFont{zhli}{隶书}{SIMLI.TTF}
-\DeployCJKFont{zhkai}{楷体}{SIMKAI.TTF}
+% \DeployCJKFont{zhkai}{楷体}{SIMKAI.TTF} %默认不需要楷体，但楷体通常用于替代斜体的宋体，因此保留代码。如果需要字体，需要自行从Windows中导出SIMKAI.TTF文件。
 
 % --- 4. 设置英文字体 (Times New Roman) ---
 \IfFontExistsTF{Times New Roman}{
@@ -108,7 +108,7 @@
 \DeclareRobustCommand*{\heiti}{\CJKfamily{zhhei}}
 \DeclareRobustCommand*{\fangsong}{\CJKfamily{zhfs}}
 \DeclareRobustCommand*{\lishu}{\CJKfamily{zhli}}
-\DeclareRobustCommand*{\kaishu}{\CJKfamily{zhkai}}
+% \DeclareRobustCommand*{\kaishu}{\CJKfamily{zhkai}}
 
 %-----------------------数学环境-----------------------
 \usepackage{amsmath,amssymb,amsthm}
