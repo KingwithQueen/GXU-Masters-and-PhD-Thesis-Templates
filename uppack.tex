@@ -1,5 +1,6 @@
 %加载并设置宏包
 %广西大学物理学院2021级硕士王信哲制作
+%-----------------------全局设置-----------------------
 \ctexset{
 	bibname = 参考文献,
 	contentsname=\heiti\zihao{3} 目\ 录,
@@ -23,6 +24,7 @@
 }
 %\usepackage{ctex}%設置中文
 
+%-----------------------标题设置-----------------------
 \usepackage{tocloft}
 \renewcommand{\cfttoctitlefont}{\hfill} % 将目录标题设置为三号字、黑体
 \renewcommand{\cftaftertoctitle}{\hfill} % 将目录标题居中
@@ -32,123 +34,85 @@
 \setlength{\cftbeforesecskip}{0pt}
 \renewcommand{\cftdotsep}{1}
 
-% --- 设置中文字体 ---
-% 尝试寻找系统中的“宋体”，如果找不到则使用当前目录下的 FZSSK.TTF。\songti命令在下文定义。
-\IfFontExistsTF{宋体}{
-	\setCJKmainfont{宋体}
-}{
-	\setCJKmainfont{FZSSK.TTF}[
-	Path=./字体/,
-	% 如果该字体有对应的粗体/斜体文件，可以在这里指定，否则系统会通过算法伪粗体
-	% BoldFont = FZSSK_Bold.TTF, 
-	]
+%-----------------------字体设置-----------------------
+\usepackage{fontspec}
+% --- 定义报错宏：如果字体缺失，则停止编译并显示具体错误信息 ---
+\newcommand{\FontMissingError}[2]{
+  \GenericError{(Font Error)}{^^J
+    ============================================================^^J
+    错误: 找不到字体 "#1" !^^J
+    该字体是论文格式必需的。请采取以下措施之一：^^J
+    1. 在系统中安装该字体 (Windows/macOS 系统字体库);^^J
+    2. 将字体文件 "#2" 放入项目根目录下的 [字体] 文件夹中。^^J
+    ============================================================}{}{}%
 }
-% --- 设置英文字体 ---
-% 尝试寻找系统中的“Times New Roman”，如果找不到则使用当前目录下的 TIMES.TTF
+% --- 辅助宏：自动选择 1.系统字体 -> 2.本地字体 -> 3.报错 ---
+% 参数：#1 内部族名, #2 系统字体名, #3 本地文件名
+\newcommand{\DeployCJKFont}[3]{
+    \IfFontExistsTF{#2}{
+        \setCJKfamilyfont{#1}{#2}
+    }{
+        \IfFileExists{./字体/#3}{
+            \setCJKfamilyfont{#1}{#3}[Path=./字体/]
+        }{
+            \FontMissingError{#2}{#3}
+        }
+    }
+}
+% --- 1. 设置英文字体 (Times New Roman) ---
 \IfFontExistsTF{Times New Roman}{
-	\setmainfont{Times New Roman}
+    \setmainfont{Times New Roman}
 }{
-	\setmainfont{TIMES.TTF}[
-	Path=./字体/,
-	% 注意：Times New Roman 通常有四个文件（标准、粗体、斜体、粗斜体）
-	 BoldFont=TIMESBD.TTF,
-	 ItalicFont=TIMESI.TTF,
-	 BoldItalicFont=TIMESBI.TTF
-	]
-}
-% --- 3. 设置仿宋字体 (\fangsong) ---
-% ctex 的 \fangsong 命令内部调用的是 zhfs 字体族
-\IfFontExistsTF{仿宋}{
-	\setCJKfamilyfont{zhfs}{仿宋}
-}{
-	\IfFileExists{./字体/FS.TTF}{
-		% 如果系统没仿宋，但当前目录有 FS.TTF，则将其定义为 zhfs 族
-		\setCJKfamilyfont{zhfs}{FS.TTF}[Path=./字体/]
-	}{
-		% 如果两个都没有，Overleaf 通常自带 FandolFangsong
-		\IfFontExistsTF{FandolFangsong-Regular.otf}{
-			\setCJKfamilyfont{zhfs}{FandolFangsong-Regular.otf}
-		}{
-			\typeout{Warning: Fangsong font not found.}
-		}
-	}
-}
-% 重新定义 \fangsong 命令，确保它指向我们刚才定义的 zhfs 族
-\renewcommand*{\fangsong}{\CJKfamily{zhfs}}
-
-% --- 4. 设置隶书字体 (\lishu) ---
-% ctex 的 \lishu 命令内部调用的是 zhli 字体族
-\IfFontExistsTF{隶书}{
-    \setCJKfamilyfont{zhli}{隶书}
-}{
-    \IfFileExists{./字体/SIMLI.TTF}{
-        % 如果系统没有隶书，但 ./字体/ 目录下有 SIMLI.TTF，则将其定义为 zhli 族
-        \setCJKfamilyfont{zhli}{SIMLI.TTF}[Path=./字体/]
+    \IfFileExists{./字体/TIMES.TTF}{
+        \setmainfont{TIMES.TTF}[
+            Path=./字体/,
+            BoldFont=TIMESBD.TTF,
+            ItalicFont=TIMESI.TTF,
+            BoldItalicFont=TIMESBI.TTF
+        ]
     }{
-        % 如果两个都没有，由于 Fandol 没提供隶书，这里通常回退到楷体或报警告
-        \IfFontExistsTF{FandolKai-Regular.otf}{
-            \typeout{Warning: Lishu font not found, falling back to FandolKai.}
-            \setCJKfamilyfont{zhli}{FandolKai-Regular.otf}
-        }{
-            \typeout{Warning: Lishu font not found.}
-        }
+        \FontMissingError{Times New Roman}{TIMES.TTF / TIMESBD.TTF 等}
     }
 }
-% 重新定义 \lishu 命令，确保指向刚才定义的 zhli 族
-% \providecommand 是为了防止某些极简配置下命令未定义，\renewcommand 则是覆盖 ctex 默认
-\makeatletter
-\DeclareRobustCommand*{\lishu}{\CJKfamily{zhli}}
-\makeatother
+% --- 2. 设置中文字体族 (供 \songti, \heiti 等命令调用) ---
+% 宋体
+\DeployCJKFont{zhsong}{宋体}{FZSSK.TTF}
+% 黑体
+\DeployCJKFont{zhhei}{黑体}{SIMHEI.TTF}
+% 仿宋
+\DeployCJKFont{zhfs}{仿宋}{FS.TTF}
+% 隶书
+\DeployCJKFont{zhli}{隶书}{SIMLI.TTF}
+% 楷体 (通常论文也会用到)
+\DeployCJKFont{zhkai}{楷体}{SIMKAI.TTF}
 
-% --- 5. 设置黑体字体 (\heiti) ---
-\IfFontExistsTF{黑体}{
-    \setCJKfamilyfont{zhhei}{黑体}
-}{
-    \IfFileExists{./字体/SIMHEI.TTF}{
-        \setCJKfamilyfont{zhhei}{SIMHEI.TTF}[Path=./字体/]
-    }{
-        % 如果都没有，强制使用 Linux 自带的 Fandol 黑体作为保底
-        \IfFontExistsTF{FandolHei-Regular.otf}{
-            \setCJKfamilyfont{zhhei}{FandolHei-Regular.otf}
-        }{
-            \typeout{Warning: Heiti not found!}
-        }
-    }
-}
-% 统一 \heiti 命令
-\makeatletter
-\DeclareRobustCommand*{\heiti}{\CJKfamily{zhhei}}
-\makeatother
-
-% --- 6. 设置宋体命令 (\songti) ---
-% ctex 的 \songti 命令内部调用的是 zhsong 字体族
+% --- 3. 设置文档主字体 (CJKmainfont) ---
+% 这一步是为了确保默认正文使用宋体
 \IfFontExistsTF{宋体}{
-    \setCJKfamilyfont{zhsong}{宋体}
+    \setCJKmainfont{宋体}
 }{
     \IfFileExists{./字体/FZSSK.TTF}{
-        % 如果系统没有宋体，但 ./字体/ 目录下有 FZSSK.TTF，则将其定义为 zhsong 族
-        \setCJKfamilyfont{zhsong}{FZSSK.TTF}[Path=./字体/]
+        \setCJKmainfont{FZSSK.TTF}[Path=./字体/]
     }{
-        % 如果两个都没有，回退到 Linux/Overleaf 自带的 FandolSong
-        \IfFontExistsTF{FandolSong-Regular.otf}{
-            \setCJKfamilyfont{zhsong}{FandolSong-Regular.otf}
-        }{
-            \typeout{Warning: Songti font not found.}
-        }
+        % 这里不需要再报错，因为上面的 \DeployCJKFont 已经检查过了
     }
 }
-% 重新定义 \songti 命令，确保它指向我们刚才定义的 zhsong 族
-\makeatletter
+
+% --- 4. 重新定义标准切换命令 ---
 \DeclareRobustCommand*{\songti}{\CJKfamily{zhsong}}
-\makeatother
+\DeclareRobustCommand*{\heiti}{\CJKfamily{zhhei}}
+\DeclareRobustCommand*{\fangsong}{\CJKfamily{zhfs}}
+\DeclareRobustCommand*{\lishu}{\CJKfamily{zhli}}
+\DeclareRobustCommand*{\kaishu}{\CJKfamily{zhkai}}
 
-
+%-----------------------数学环境-----------------------
 \usepackage{amsmath,amssymb,amsthm}
 \let\hbaroriginal\hbar
 \AtBeginDocument{\let\hbar\hbaroriginal}
 %\usepackage{unicode-math}
 %\setmathfont{Latin Modern Math}
 
+%-----------------------其他设置-----------------------
 \usepackage{geometry}
 \geometry{papersize={21cm,29.7cm}}
 \geometry{left=2.8cm,right=2.5cm,top=2.8cm,bottom=2.2cm}
